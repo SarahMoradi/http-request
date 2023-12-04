@@ -4,8 +4,10 @@ import { getTodo } from "./service/api"
 import { header} from "./utility/constant"
 
 function App() {
+  
   function requestHandler(header?: boolean){
-    useAxios(getTodo, header).then(res => console.log(res))
+    // useAxios(getTodo, header).then(res => console.log(res));
+    getTodo().then(res => console.log(res))
   }
 
   return (

@@ -1,3 +1,7 @@
-const baseURL = import.meta.env.BASE_API_URL;
+import { api } from "../helper/apiHelper";
 
-export const getTodo = `${baseURL}/todos/1`
+export const getTodo = (): Promise<any> => {
+	return api
+		.get('/todos/1').then(d=> d);
+		
+};

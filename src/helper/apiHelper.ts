@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const token = localStorage.getItem('token') || '#Fake Token'
+const baseURL = 'https://jsonplaceholder.typicode.com'
 
 const headers: Readonly<Record<string, string | boolean>> = {
 	Accept: 'application/json',
@@ -25,7 +26,7 @@ const injectToken = (
 class Api {
 
 	private instance: AxiosInstance | null = null;
-	readonly baseURL = import.meta.env.BASE_API_URL;
+	readonly baseURL = baseURL;
 
 	http(): AxiosInstance {
 		return this.instance != null ? this.instance : this.initHttp();
