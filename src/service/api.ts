@@ -1,7 +1,10 @@
-import { api } from "../helper/apiHelper";
+import {api} from '../helper/apiHelper'
 
-export const getTodo = (): Promise<any> => {
-	return api
-		.get('/todos/1').then(d=> d);
-		
-};
+export const getTodo = (header: boolean): Promise<any> => {
+  return api
+    .get<TodoQueryResponse>('/todos/1', header)
+    .then((response) => response)
+    .catch((error) => {
+      throw new Error(error)
+    })
+}

@@ -1,67 +1,29 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios'
 
-const token = localStorage.getItem('token') || '#Fake Token'
 const baseURL = 'https://jsonplaceholder.typicode.com'
+const token = localStorage.getItem('token') || '#Fake Token'
+class ApiService {
+  private instance: AxiosInstance
+  constructor() {
+    this.instance = axios.create({
+      baseURL,
+    })
+  }
 
-const headers: Readonly<Record<string, string | boolean>> = {
-	Accept: 'application/json',
-	'Content-Type': 'application/json; charset=utf-8',
-	'Access-Control-Allow-Credentials': true,
-	'X-Requested-With': 'XMLHttpRequest',
-};
+  private setHeaders(withHeaders: boolean): AxiosRequestConfig {
+    if (withHeaders) {
+      return {
+        headers: {'Content-Type': 'application/json', Authorization: `Bearer ${token}`},
+      }
+    }
+    return {}
+  }
 
-const injectToken = (
-	config: AxiosRequestConfig<string>
-): string | AxiosRequestConfig<string> => {
-	try {
-		if (token && config.headers) {
-			config.headers.Authorization = `Bearer ${token}`;
-		}
-		return config;
-	} catch (error) {
-		throw new Error(String(error));
-	}
-};
-
-class Api {
-
-	private instance: AxiosInstance | null = null;
-	readonly baseURL = baseURL;
-
-	http(): AxiosInstance {
-		return this.instance != null ? this.instance : this.initHttp();
-	}
-
-	initHttp() {
-		const http = axios.create({
-			baseURL: this.baseURL,
-			headers,
-		});
-		http.interceptors.request.use(
-			(config) => injectToken(config),
-			(error) => Promise.reject(error)
-		);
-		http.interceptors.response.use(
-			(response: AxiosResponse) => {
-				return response.data;
-			},
-			(error) => {
-				this.handleError(error);
-				throw error;
-			}
-		);
-		this.instance = http;
-		return http;
-	}
-
-	private handleError(error: AxiosError) {
-		if (error.response) {
-			if (error.response.data) throw Error('Something went wrong!')
-			if (error.response.status === 401) throw Error('Error 401!')
-            else throw Error('Something went wrong!')
-		}
-	}
+  public get<T>(url: string, withHeaders: boolean = false): Promise<AxiosResponse<T>> {
+    const headers = this.setHeaders(withHeaders)
+    return this.instance.get<T>(url, headers)
+  }
 }
 
-const api = new Api().initHttp();
-export { api };
+const api = new ApiService()
+export {api}
