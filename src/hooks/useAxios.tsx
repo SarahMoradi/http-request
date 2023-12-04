@@ -5,11 +5,10 @@ export const useAxios = (url: string, header?: boolean) => {
     return axios
       .get(url, {
         headers: {
-            "Authorization": "Bearer AAA",
+          Authorization: 'Bearer AAA',
         },
       })
       .then((res) => res)
-  } else {
-    return axios.get(url).then((res) => res)
   }
+  return axios.get(url).then((res) => res)
 }
