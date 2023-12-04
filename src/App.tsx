@@ -10,8 +10,8 @@ function App() {
 
   return (
     <Fragment>
-      <button onClick={() => requestHandler(header)}>Htpp Requets With Header</button>
-      <button onClick={() => requestHandler()}>Htpp Requets Without Header</button>
+      <button onClick={() => requestHandler(header)}>Http Request With Header</button>
+      <button onClick={() => requestHandler()}>Http Request Without Header</button>
     </Fragment>
   )
 }
